@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>homework 7 train time</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+</head>
+
+<body>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col-2">First</th>
+                <th scope="col-2">Role</th>
+                <th scope="col-2">Start Date</th>
+                <th scope="col-2">Monthly Rate</th>
+                <th scope="col-2">Yearly Rate</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <form>
+        <!-- train name -->
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="inputName">Name</label>
+                <input type="name" class="form-control" id="TrainName" placeholder="">
+            </div>
+        </div>
+        <!-- destination -->
+        <div class="form-group">
+            <label for="inputRole">Role</label>
+            <input type="text" class="form-control" id="TrainDestination" placeholder="">
+        </div>
+        <!-- train times -->
+        <div class="form-group">
+            <label for="inputDate">Start Date</label>
+            <input type="text" class="form-control" id="TrainTime" placeholder="">
+        </div>
+        <!-- first arrival time -->
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="inputRate">Monthly Rate</label>
+                <input type="text" class="form-control" id="FirstArrival" placeholder="">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
+    </form>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
+<script>
+
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyACDiNmhAZA6aCe0aNeMQXh-SkyauYDtho",
+        authDomain: "homeworktrain-ada48.firebaseapp.com",
+        databaseURL: "https://homeworktrain-ada48.firebaseio.com",
+        projectId: "homeworktrain-ada48",
+        storageBucket: "",
+        messagingSenderId: "546270154002"
+    };
+    firebase.initializeApp(config);
+
+
+    var database = firebase.database();
+    var name = "";
+    var destination = "";
+    var time = "";
+    var minutes = 0;
+
+    $("#submitButton").on("click", function (event) {
+        event.preventDefault();
+
+        name = $("#TrainName").val().trim();
+        destination = $("#TrainDestination").val().trim();
+        time = $("#TrainTime").val().trim();
+        minutes = $("#FirstArrival").val().trim();
+
+        database.ref().push({
+            name: name,
+            destination: destination,
+            time: time,
+            minutes: minutes
+        })
+    });
+
+    database.ref().on("child_added", function (addchildtoproject) {
+
+        var thetrainname = addchildtoproject.val().name;
+        var thedestination = addchildtoproject.val().destination;
+        var thetraintime = addchildtoproject.val().traintime;
+        var thearrivaltime = addchildtoproject.val().firstarrival;
+
+        var newRow = $("<tr>").append(
+            $("<th>").text(thetrainname),
+            $("<td>").text(thedestination),
+            $("<td>").text(thetraintime),
+            $("<td>").text(thearrivaltime)
+        )
+
+        $(".table > tbody:last-child").append(newRow)
+    });
+
+</script>
+
+</html>
